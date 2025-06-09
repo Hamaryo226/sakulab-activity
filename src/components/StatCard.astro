@@ -1,0 +1,116 @@
+---
+export interface Props {
+  title: string;
+  value: number | string;
+  icon: string;
+  trend?: number;
+  subtitle?: string;
+}
+
+const { title, value, icon, trend, subtitle } = Astro.props;
+---
+
+<div class="stat-card-modern">
+  <div class="stat-icon-modern">
+    <i class={`fas ${icon}`}></i>
+  </div>
+  <div class="stat-number-modern">{value}</div>
+  <div class="stat-label-modern">{title}</div>
+  {subtitle && <div class="stat-subtitle-modern">{subtitle}</div>}
+  {
+    trend !== undefined && (
+      <div class={`stat-trend-modern ${trend >= 0 ? "positive" : "negative"}`}>
+        <i class={`fas ${trend >= 0 ? "fa-arrow-up" : "fa-arrow-down"}`} />
+        {Math.abs(trend)}%
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .stat-card-modern {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card-modern::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #000000, #374151);
+  }
+
+  .stat-card-modern:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.1),
+      0 2px 4px -2px rgb(0 0 0 / 0.1);
+    border-color: #d1d5db;
+  }
+
+  .stat-icon-modern {
+    width: 3rem;
+    height: 3rem;
+    background: #f3f4f6;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 1.25rem;
+    color: #374151;
+  }
+
+  .stat-number-modern {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 0.25rem;
+    line-height: 1.2;
+  }
+
+  .stat-label-modern {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #4b5563;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+  }
+
+  .stat-subtitle-modern {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
+  }
+
+  .stat-trend-modern {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+  }
+
+  .stat-trend-modern.positive {
+    color: #059669;
+  }
+
+  .stat-trend-modern.negative {
+    color: #dc2626;
+  }
+
+  .stat-trend-modern i {
+    font-size: 0.625rem;
+  }
+</style>

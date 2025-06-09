@@ -1,0 +1,234 @@
+---
+
+---
+
+<div class="card">
+  <div class="card-header">
+    <h3><i class="fas fa-cog"></i> sakurai-lab-07 Organization Analytics</h3>
+  </div>
+  <div class="card-body">
+    <div class="org-info">
+      <div class="org-badge">
+        <i class="fab fa-github"></i>
+        <span>Organization: sakurai-lab-07</span>
+      </div>
+      <p>
+        このアプリケーションは sakurai-lab-07 Organization
+        専用の分析ツールです。
+      </p>
+    </div>
+    <form id="configForm">
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-search"></i>
+          分析開始
+        </button>
+        <button type="button" class="btn btn-secondary" id="loadExample">
+          <i class="fas fa-eye"></i>
+          デモを表示
+        </button>
+      </div>
+    </form>
+
+    <div id="loading" class="loading" style="display: none;">
+      <div class="spinner"></div>
+      <p>データを取得中...</p>
+    </div>
+
+    <div id="error" class="error" style="display: none;"></div>
+  </div>
+</div>
+
+<script is:inline>
+  function initConfigForm() {
+    const configForm = document.getElementById("configForm");
+    const loadExampleBtn = document.getElementById("loadExample");
+    if (configForm) {
+      configForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        // Fixed organization
+        const orgName = "sakurai-lab-07";
+
+        // Store configuration
+        localStorage.setItem("githubOrg", orgName);
+
+        // Show loading
+        showLoading();
+
+        // Redirect to analytics page
+        window.location.href = `/analytics?org=${orgName}`;
+      });
+    }
+
+    if (loadExampleBtn) {
+      loadExampleBtn.addEventListener("click", function () {
+        showLoading();
+
+        setTimeout(() => {
+          window.location.href = "/analytics?org=demo";
+        }, 1000);
+      });
+    }
+
+    function showLoading() {
+      const loading = document.getElementById("loading");
+      const error = document.getElementById("error");
+      if (loading) loading.style.display = "flex";
+      if (error) error.style.display = "none";
+    }
+
+    function showError(message) {
+      const error = document.getElementById("error");
+      const loading = document.getElementById("loading");
+      if (error) {
+        error.textContent = message;
+        error.style.display = "block";
+      }
+      if (loading) loading.style.display = "none";
+    } // Load saved configuration (no longer needed)
+    // Organization is now fixed to sakurai-lab-07
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initConfigForm);
+  } else {
+    initConfigForm();
+  }
+</script>
+
+<style>
+  .card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px 24px;
+  }
+
+  .card-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+
+  .card-header i {
+    margin-right: 8px;
+  }
+
+  .card-body {
+    padding: 24px;
+  }
+
+  .org-info {
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .org-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  }
+
+  .org-info p {
+    color: #6b7280;
+    font-size: 0.95rem;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  .btn-secondary {
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+  }
+
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 30px;
+    text-align: center;
+  }
+
+  .loading .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(102, 126, 234, 0.1);
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .loading p {
+    color: #6b7280;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .error {
+    background: #fef2f2;
+    color: #dc2626;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #fecaca;
+    margin-top: 16px;
+  }
+</style>

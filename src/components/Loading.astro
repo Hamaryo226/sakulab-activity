@@ -1,0 +1,208 @@
+---
+export interface Props {
+  message?: string;
+  size?: "small" | "medium" | "large";
+}
+
+const { message = "データを読み込み中...", size = "medium" } = Astro.props;
+---
+
+<div class={`loading-container loading-${size}`}>
+  <div class="loading-spinner">
+    <div class="spinner"></div>
+    <div class="spinner-inner"></div>
+  </div>
+  <p class="loading-message">{message}</p>
+  <div class="loading-steps">
+    <div class="step">
+      <i class="fas fa-download"></i>
+      <span>GitHub APIからデータ取得中</span>
+    </div>
+    <div class="step">
+      <i class="fas fa-cogs"></i>
+      <span>データを処理中</span>
+    </div>
+    <div class="step">
+      <i class="fas fa-chart-bar"></i>
+      <span>グラフを生成中</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-16) var(--spacing-6);
+    text-align: center;
+  }
+
+  .loading-small {
+    padding: var(--spacing-8) var(--spacing-6);
+  }
+
+  .loading-large {
+    padding: var(--spacing-20) var(--spacing-6);
+    min-height: 50vh;
+  }
+
+  .loading-spinner {
+    position: relative;
+    margin-bottom: var(--spacing-6);
+  }
+
+  .spinner {
+    width: 4rem;
+    height: 4rem;
+    border: 3px solid var(--color-gray-200);
+    border-top: 3px solid var(--color-gray-900);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  .loading-small .spinner {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-width: 2px;
+  }
+
+  .loading-large .spinner {
+    width: 5rem;
+    height: 5rem;
+    border-width: 4px;
+  }
+
+  .spinner-inner {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: calc(100% - 12px);
+    height: calc(100% - 12px);
+    border: 2px solid transparent;
+    border-bottom: 2px solid var(--color-gray-600);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite reverse;
+  }
+
+  .loading-small .spinner-inner {
+    top: 4px;
+    left: 4px;
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    border-width: 1px;
+  }
+
+  .loading-large .spinner-inner {
+    top: 8px;
+    left: 8px;
+    width: calc(100% - 16px);
+    height: calc(100% - 16px);
+    border-width: 3px;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .loading-message {
+    font-size: var(--text-lg);
+    color: var(--color-gray-600);
+    margin: 0 0 var(--spacing-8) 0;
+    font-weight: var(--font-medium);
+  }
+
+  .loading-small .loading-message {
+    font-size: var(--text-base);
+    margin-bottom: var(--spacing-4);
+  }
+
+  .loading-large .loading-message {
+    font-size: var(--text-xl);
+    margin-bottom: var(--spacing-10);
+  }
+
+  .loading-steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+    max-width: 400px;
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-3) var(--spacing-5);
+    background: white;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .step i {
+    color: var(--color-gray-500);
+    font-size: var(--text-lg);
+    width: 1.25rem;
+    text-align: center;
+  }
+
+  .step span {
+    color: var(--color-gray-700);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 0.7;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.01);
+    }
+  }
+
+  .step:nth-child(1) {
+    animation-delay: 0s;
+  }
+
+  .step:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+
+  .step:nth-child(3) {
+    animation-delay: 0.6s;
+  }
+
+  @media (max-width: 768px) {
+    .loading-container {
+      padding: var(--spacing-12) var(--spacing-4);
+    }
+
+    .loading-small {
+      padding: var(--spacing-6) var(--spacing-4);
+    }
+
+    .loading-large {
+      padding: var(--spacing-16) var(--spacing-4);
+    }
+
+    .loading-steps {
+      max-width: 300px;
+    }
+
+    .step {
+      padding: var(--spacing-2) var(--spacing-4);
+    }
+  }
+</style>
