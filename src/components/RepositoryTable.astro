@@ -75,6 +75,65 @@ const { repositories } = Astro.props;
           }
         </tbody>
       </table>
+
+      {/* モバイル用カード表示 */}
+      <div class="mobile-cards">
+        {
+          repositories.map((repo) => (
+            <div class="mobile-card">
+              <div class="mobile-card-header">
+                <i class="fas fa-folder" />
+                <div class="mobile-card-title">{repo.name}</div>
+                <span class={`language-tag ${repo.language.toLowerCase()}`}>
+                  {repo.language}
+                </span>
+              </div>
+              <div class="mobile-card-body">
+                <div class="mobile-card-item">
+                  <div class="mobile-card-label">コミット数</div>
+                  <div class="mobile-card-value">
+                    {repo.commits.toLocaleString()}
+                  </div>
+                </div>
+                <div class="mobile-card-item">
+                  <div class="mobile-card-label">コントリビューター</div>
+                  <div class="mobile-card-value">{repo.contributors}</div>
+                </div>
+                <div class="mobile-card-item">
+                  <div class="mobile-card-label">スター</div>
+                  <div class="mobile-card-value">
+                    <i class="fas fa-star" />
+                    {repo.stars}
+                  </div>
+                </div>
+                <div class="mobile-card-item">
+                  <div class="mobile-card-label">フォーク</div>
+                  <div class="mobile-card-value">
+                    <i class="fas fa-code-branch" />
+                    {repo.forks}
+                  </div>
+                </div>
+                <div class="mobile-card-item full-width">
+                  <div class="mobile-card-label">最終更新</div>
+                  <div class="mobile-card-value">
+                    {new Date(repo.lastCommit).toLocaleDateString("ja-JP")}
+                  </div>
+                </div>
+              </div>
+              <div class="mobile-status">
+                <span
+                  class={`status-badge ${repo.isActive ? "active" : "inactive"}`}
+                >
+                  <i
+                    class={`fas ${repo.isActive ? "fa-check-circle" : "fa-clock"}`}
+                  />
+                  {repo.isActive ? "アクティブ" : "非アクティブ"}
+                </span>
+              </div>
+            </div>
+          ))
+        }
+      </div>
     </div>
   </div>
 </div>
@@ -218,13 +277,35 @@ const { repositories } = Astro.props;
     color: var(--color-gray-700);
     border: 1px solid var(--color-gray-200);
   }
-
   .status-badge.inactive {
     background: var(--color-gray-50);
     color: var(--color-gray-500);
     border: 1px solid var(--color-gray-200);
   }
 
+  /* デスクトップではモバイルカードを非表示 */
+  .mobile-cards {
+    display: none;
+  }
+  /* タブレット表示の調整 */
+  @media (max-width: 1024px) {
+    .data-table th,
+    .data-table td {
+      padding: var(--spacing-3);
+      font-size: var(--text-xs);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .data-table {
+      min-width: 800px;
+    }
+  }
+
+  /* モバイル表示：カード形式に変更 */
   @media (max-width: 768px) {
     .table-header {
       padding: var(--spacing-4);
@@ -238,9 +319,99 @@ const { repositories } = Astro.props;
       font-size: var(--text-base);
     }
 
-    .data-table th,
-    .data-table td {
-      padding: var(--spacing-2);
+    .table-container {
+      overflow: visible;
+      border: none;
+    }
+
+    .data-table {
+      display: none;
+    }
+
+    .mobile-cards {
+      display: block;
+      gap: var(--spacing-4);
+    }
+
+    .mobile-card {
+      background: white;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-4);
+      margin-bottom: var(--spacing-3);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .mobile-card-header {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      margin-bottom: var(--spacing-3);
+      padding-bottom: var(--spacing-2);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .mobile-card-title {
+      font-weight: var(--font-semibold);
+      color: var(--color-gray-900);
+      flex: 1;
+    }
+
+    .mobile-card-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-3);
+    }
+
+    .mobile-card-item {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-1);
+    }
+
+    .mobile-card-label {
+      font-size: var(--text-xs);
+      font-weight: var(--font-medium);
+      color: var(--color-gray-500);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .mobile-card-value {
+      font-size: var(--text-sm);
+      color: var(--color-gray-900);
+    }
+
+    .mobile-card-item.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .mobile-status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: var(--spacing-2);
+      padding-top: var(--spacing-2);
+      border-top: 1px solid var(--color-border);
+    }
+  }
+
+  /* 小さなモバイル端末での調整 */
+  @media (max-width: 480px) {
+    .mobile-card-body {
+      grid-template-columns: 1fr;
+    }
+
+    .table-header {
+      padding: var(--spacing-3);
+    }
+
+    .table-body {
+      padding: var(--spacing-3);
+    }
+
+    .mobile-card {
+      padding: var(--spacing-3);
     }
   }
 </style>
