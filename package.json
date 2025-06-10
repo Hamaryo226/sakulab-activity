@@ -11,7 +11,7 @@
   "dependencies": {
     "@octokit/rest": "^22.0.0",
     "@types/node": "^22.15.30",
-    "astro": "^5.9.1",
+    "astro": "^5.9.2",
     "chart.js": "^4.4.9",
     "date-fns": "^4.1.0"
   }
